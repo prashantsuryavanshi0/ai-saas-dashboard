@@ -14,19 +14,21 @@ export default function AdminPage() {
   const [orders, setOrders] = useState("");
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("dashboardData");
-      if (saved) {
-        const data = JSON.parse(saved);
-        setRevenue(data.revenue || "");
-        setUsers(data.users || "");
-        setOrders(data.orders || "");
-      }
+    const data = localStorage.getItem("dashboardData");
+    if (data) {
+      const parsed = JSON.parse(data);
+      setRevenue(parsed.revenue || "");
+      setUsers(parsed.users || "");
+      setOrders(parsed.orders || "");
     }
   }, []);
 
   if (role !== "admin") {
-    return <div style={{ color: "white" }}>Access Denied</div>;
+    return (
+      <div style={{ color: "white", padding: "20px" }}>
+        ❌ Access Denied
+      </div>
+    );
   }
 
   const handleSave = () => {
@@ -34,18 +36,77 @@ export default function AdminPage() {
       "dashboardData",
       JSON.stringify({ revenue, users, orders })
     );
-    alert("Saved!");
+    alert("Saved Successfully ✅");
   };
 
   return (
-    <div style={{ padding: "40px", color: "white" }}>
-      <h1>Admin Panel</h1>
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "#020617",
+        color: "white",
+        padding: "40px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <h1 style={{ fontSize: "28px", marginBottom: "20px" }}>
+        Admin Panel ⚙️
+      </h1>
 
-      <input value={revenue} onChange={(e) => setRevenue(e.target.value)} placeholder="Revenue" /><br /><br />
-      <input value={users} onChange={(e) => setUsers(e.target.value)} placeholder="Users" /><br /><br />
-      <input value={orders} onChange={(e) => setOrders(e.target.value)} placeholder="Orders" /><br /><br />
+      <div
+        style={{
+          background: "#0f172a",
+          padding: "30px",
+          borderRadius: "10px",
+          width: "300px",
+        }}
+      >
+        <input
+          value={revenue}
+          onChange={(e) => setRevenue(e.target.value)}
+          placeholder="Revenue"
+          style={inputStyle}
+        />
 
-      <button onClick={handleSave}>Save</button>
+        <input
+          value={users}
+          onChange={(e) => setUsers(e.target.value)}
+          placeholder="Users"
+          style={inputStyle}
+        />
+
+        <input
+          value={orders}
+          onChange={(e) => setOrders(e.target.value)}
+          placeholder="Orders"
+          style={inputStyle}
+        />
+
+        <button onClick={handleSave} style={btnStyle}>
+          Save
+        </button>
+      </div>
     </div>
   );
 }
+
+const inputStyle = {
+  width: "100%",
+  padding: "10px",
+  marginBottom: "15px",
+  borderRadius: "6px",
+  border: "none",
+  outline: "none",
+};
+
+const btnStyle = {
+  width: "100%",
+  padding: "10px",
+  background: "#3b82f6",
+  border: "none",
+  borderRadius: "6px",
+  color: "white",
+  cursor: "pointer",
+};
