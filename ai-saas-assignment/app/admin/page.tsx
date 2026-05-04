@@ -25,13 +25,16 @@ export default function AdminPage() {
 
   if (!mounted) return null;
 
-  // 🔴 IMPORTANT: DO NOT USE useSearchParams anymore
   const isAdmin =
     typeof window !== "undefined" &&
     window.location.search.includes("role=admin");
 
   if (!isAdmin) {
-    return <div style={{ color: "white" }}>Access Denied</div>;
+    return (
+      <div style={{ color: "white", padding: "20px" }}>
+        ❌ Access Denied
+      </div>
+    );
   }
 
   const handleSave = () => {
@@ -39,18 +42,78 @@ export default function AdminPage() {
       "dashboardData",
       JSON.stringify({ revenue, users, orders })
     );
-    alert("Saved ✅");
+    alert("Saved Successfully ✅");
   };
 
   return (
-    <div style={{ padding: 40, color: "white", background: "#020617", minHeight: "100vh" }}>
-      <h1>Admin Panel ⚙️</h1>
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "#020617",
+        color: "white",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <div
+        style={{
+          background: "#0f172a",
+          padding: "30px",
+          borderRadius: "10px",
+          width: "320px",
+        }}
+      >
+        <h1 style={{ marginBottom: "20px" }}>Admin Panel ⚙️</h1>
 
-      <input value={revenue} onChange={(e) => setRevenue(e.target.value)} placeholder="Revenue" /><br /><br />
-      <input value={users} onChange={(e) => setUsers(e.target.value)} placeholder="Users" /><br /><br />
-      <input value={orders} onChange={(e) => setOrders(e.target.value)} placeholder="Orders" /><br /><br />
+        <input
+          type="text"
+          value={revenue}
+          onChange={(e) => setRevenue(e.target.value)}
+          placeholder="Revenue"
+          style={inputStyle}
+        />
 
-      <button onClick={handleSave}>Save</button>
+        <input
+          type="text"
+          value={users}
+          onChange={(e) => setUsers(e.target.value)}
+          placeholder="Users"
+          style={inputStyle}
+        />
+
+        <input
+          type="text"
+          value={orders}
+          onChange={(e) => setOrders(e.target.value)}
+          placeholder="Orders"
+          style={inputStyle}
+        />
+
+        <button onClick={handleSave} style={btnStyle}>
+          Save
+        </button>
+      </div>
     </div>
   );
 }
+
+const inputStyle = {
+  width: "100%",
+  padding: "10px",
+  marginBottom: "15px",
+  borderRadius: "6px",
+  border: "none",
+  outline: "none",
+  color: "black",
+};
+
+const btnStyle = {
+  width: "100%",
+  padding: "10px",
+  background: "#3b82f6",
+  border: "none",
+  borderRadius: "6px",
+  color: "white",
+  cursor: "pointer",
+};
