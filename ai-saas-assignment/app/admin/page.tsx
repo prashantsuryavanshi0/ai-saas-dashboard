@@ -8,48 +8,23 @@ export default function AdminPage() {
   const [orders, setOrders] = useState("");
 
   const handleSave = () => {
-    alert("Saved successfully 🚀");
-    console.log({ revenue, users, orders });
+    alert(`Saved:
+Revenue: ${revenue}
+Users: ${users}
+Orders: ${orders}`);
   };
 
   return (
-    <div
-      style={{
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        background: "#020617",
-      }}
-    >
-      <div
-        style={{
-          background: "#0f172a",
-          padding: "30px",
-          borderRadius: "12px",
-          width: "320px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "15px",
-          boxShadow: "0 0 20px rgba(0,0,0,0.5)",
-        }}
-      >
-        <h1 style={{ color: "white", textAlign: "center" }}>
-          ⚙️ Admin Panel
-        </h1>
+    <div style={styles.container}>
+      <div style={styles.card}>
+        <h1 style={styles.title}>⚙️ Admin Panel</h1>
 
         <input
           type="text"
           placeholder="Revenue"
           value={revenue}
           onChange={(e) => setRevenue(e.target.value)}
-          style={{
-            padding: "10px",
-            borderRadius: "6px",
-            border: "none",
-            outline: "none",
-            fontSize: "14px",
-          }}
+          style={styles.input}
         />
 
         <input
@@ -57,13 +32,7 @@ export default function AdminPage() {
           placeholder="Users"
           value={users}
           onChange={(e) => setUsers(e.target.value)}
-          style={{
-            padding: "10px",
-            borderRadius: "6px",
-            border: "none",
-            outline: "none",
-            fontSize: "14px",
-          }}
+          style={styles.input}
         />
 
         <input
@@ -71,29 +40,56 @@ export default function AdminPage() {
           placeholder="Orders"
           value={orders}
           onChange={(e) => setOrders(e.target.value)}
-          style={{
-            padding: "10px",
-            borderRadius: "6px",
-            border: "none",
-            outline: "none",
-            fontSize: "14px",
-          }}
+          style={styles.input}
         />
 
-        <button
-          onClick={handleSave}
-          style={{
-            padding: "10px",
-            background: "#6366f1",
-            color: "white",
-            border: "none",
-            borderRadius: "6px",
-            cursor: "pointer",
-          }}
-        >
+        <button onClick={handleSave} style={styles.button}>
           Save
         </button>
       </div>
     </div>
   );
 }
+
+const styles: any = {
+  container: {
+    height: "100vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    background: "#0f172a",
+  },
+  card: {
+    background: "#111827",
+    padding: "30px",
+    borderRadius: "16px",
+    width: "320px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "15px",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
+  },
+  title: {
+    color: "white",
+    textAlign: "center",
+    marginBottom: "10px",
+  },
+  input: {
+    padding: "12px",
+    borderRadius: "8px",
+    border: "1px solid #ccc",
+    background: "#ffffff",
+    color: "#000000", // ✅ FIXED (visible typing)
+    outline: "none",
+    fontSize: "14px",
+  },
+  button: {
+    padding: "12px",
+    borderRadius: "8px",
+    border: "none",
+    background: "linear-gradient(90deg, #6366f1, #8b5cf6)",
+    color: "white",
+    fontWeight: "bold",
+    cursor: "pointer",
+  },
+};
