@@ -9,126 +9,47 @@ export default function AdminPage() {
   const [users, setUsers] = useState("");
   const [orders, setOrders] = useState("");
 
-  const [message, setMessage] = useState("");
-
-  // ✅ Check role from URL
+  // ✅ VERY IMPORTANT: run only on browser
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const role = params.get("role");
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const role = params.get("role");
 
-    if (role === "admin") {
-      setIsAdmin(true);
+      if (role === "admin") {
+        setIsAdmin(true);
+      }
     }
   }, []);
 
-  // ✅ Save data to API
-  const handleSave = async () => {
-    try {
-      const res = await fetch("/api/dashboard", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          revenue: Number(revenue),
-          users: Number(users),
-          orders: Number(orders),
-        }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        setMessage("✅ Data saved successfully!");
-      } else {
-        setMessage("❌ Failed to save data");
-      }
-    } catch (error) {
-      setMessage("❌ Error occurred");
-    }
-  };
-
-  // ❌ Not admin
+  // ❌ Block access
   if (!isAdmin) {
-    return (
-      <div style={{ color: "white", padding: "40px" }}>
-        ❌ Access Denied (Admin only)
-      </div>
-    );
+    return <div style={{ color: "white", padding: 40 }}>❌ Access Denied</div>;
   }
 
-  // ✅ Admin Panel UI
+  // ✅ Admin UI
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "black",
-        color: "white",
-        padding: "40px",
-      }}
-    >
-      <h1 style={{ fontSize: "28px", marginBottom: "20px" }}>
-        Admin Panel
-      </h1>
+    <div style={{ padding: 40, color: "white", background: "black", minHeight: "100vh" }}>
+      <h1>Admin Panel</h1>
 
       <input
-        type="number"
         placeholder="Revenue"
         value={revenue}
         onChange={(e) => setRevenue(e.target.value)}
-        style={{
-          display: "block",
-          marginBottom: "10px",
-          padding: "10px",
-          width: "250px",
-        }}
-      />
+      /><br /><br />
 
       <input
-        type="number"
         placeholder="Users"
         value={users}
         onChange={(e) => setUsers(e.target.value)}
-        style={{
-          display: "block",
-          marginBottom: "10px",
-          padding: "10px",
-          width: "250px",
-        }}
-      />
+      /><br /><br />
 
       <input
-        type="number"
         placeholder="Orders"
         value={orders}
         onChange={(e) => setOrders(e.target.value)}
-        style={{
-          display: "block",
-          marginBottom: "20px",
-          padding: "10px",
-          width: "250px",
-        }}
-      />
+      /><br /><br />
 
-      <button
-        onClick={handleSave}
-        style={{
-          padding: "10px 20px",
-          background: "purple",
-          border: "none",
-          color: "white",
-          cursor: "pointer",
-        }}
-      >
-        Save
-      </button>
-
-      {message && (
-        <p style={{ marginTop: "15px" }}>
-          {message}
-        </p>
-      )}
+      <button>Save</button>
     </div>
   );
 }
-       
