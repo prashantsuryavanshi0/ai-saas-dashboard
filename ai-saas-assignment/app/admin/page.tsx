@@ -13,110 +13,39 @@ export default function AdminPage() {
   const [users, setUsers] = useState("");
   const [orders, setOrders] = useState("");
 
-  // Load saved data
   useEffect(() => {
-    const saved = localStorage.getItem("dashboardData");
-    if (saved) {
-      const data = JSON.parse(saved);
-      setRevenue(data.revenue || "");
-      setUsers(data.users || "");
-      setOrders(data.orders || "");
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("dashboardData");
+      if (saved) {
+        const data = JSON.parse(saved);
+        setRevenue(data.revenue || "");
+        setUsers(data.users || "");
+        setOrders(data.orders || "");
+      }
     }
   }, []);
 
-  // Admin check
   if (role !== "admin") {
-    return (
-      <div style={{ color: "white", padding: "40px" }}>
-        ❌ Access Denied (Admin only)
-      </div>
-    );
+    return <div style={{ color: "white" }}>Access Denied</div>;
   }
 
-  // Save data
   const handleSave = () => {
     localStorage.setItem(
       "dashboardData",
-      JSON.stringify({
-        revenue,
-        users,
-        orders,
-      })
+      JSON.stringify({ revenue, users, orders })
     );
-    alert("✅ Data Saved!");
+    alert("Saved!");
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "linear-gradient(135deg, #0f172a, #1e293b)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <div
-        style={{
-          background: "#111827",
-          padding: "30px",
-          borderRadius: "15px",
-          width: "350px",
-          boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
-        }}
-      >
-        <h2 style={{ color: "white", marginBottom: "20px" }}>
-          Admin Panel ⚙️
-        </h2>
+    <div style={{ padding: "40px", color: "white" }}>
+      <h1>Admin Panel</h1>
 
-        <input
-          placeholder="Revenue"
-          value={revenue}
-          onChange={(e) => setRevenue(e.target.value)}
-          style={inputStyle}
-        />
+      <input value={revenue} onChange={(e) => setRevenue(e.target.value)} placeholder="Revenue" /><br /><br />
+      <input value={users} onChange={(e) => setUsers(e.target.value)} placeholder="Users" /><br /><br />
+      <input value={orders} onChange={(e) => setOrders(e.target.value)} placeholder="Orders" /><br /><br />
 
-        <input
-          placeholder="Users"
-          value={users}
-          onChange={(e) => setUsers(e.target.value)}
-          style={inputStyle}
-        />
-
-        <input
-          placeholder="Orders"
-          value={orders}
-          onChange={(e) => setOrders(e.target.value)}
-          style={inputStyle}
-        />
-
-        <button onClick={handleSave} style={buttonStyle}>
-          Save Data 🚀
-        </button>
-      </div>
+      <button onClick={handleSave}>Save</button>
     </div>
   );
 }
-
-// styles
-const inputStyle = {
-  width: "100%",
-  padding: "10px",
-  marginBottom: "15px",
-  borderRadius: "8px",
-  border: "1px solid #374151",
-  background: "#1f2937",
-  color: "white",
-  outline: "none",
-};
-
-const buttonStyle = {
-  width: "100%",
-  padding: "12px",
-  background: "linear-gradient(90deg, #6366f1, #a855f7)",
-  border: "none",
-  borderRadius: "8px",
-  color: "white",
-  fontWeight: "bold",
-  cursor: "pointer",
-};
