@@ -1,6 +1,8 @@
+export const dynamic = "force-dynamic";
+
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 
 export default function AdminPage() {
@@ -11,6 +13,17 @@ export default function AdminPage() {
   const [users, setUsers] = useState("");
   const [orders, setOrders] = useState("");
 
+  // ✅ Load existing data (optional)
+  useEffect(() => {
+    const saved = localStorage.getItem("dashboardData");
+    if (saved) {
+      const data = JSON.parse(saved);
+      setRevenue(data.revenue || "");
+      setUsers(data.users || "");
+      setOrders(data.orders || "");
+    }
+  }, []);
+
   // 🔐 Admin Protection
   if (role !== "admin") {
     return (
@@ -20,11 +33,17 @@ export default function AdminPage() {
     );
   }
 
+  // 💾 Save Data
   const handleSave = () => {
     localStorage.setItem(
       "dashboardData",
-      JSON.stringify({ revenue, users, orders })
+      JSON.stringify({
+        revenue,
+        users,
+        orders,
+      })
     );
+
     alert("✅ Data Saved!");
   };
 
@@ -80,7 +99,7 @@ export default function AdminPage() {
   );
 }
 
-// 🎨 styles
+// 🎨 Styles
 const inputStyle = {
   width: "100%",
   padding: "10px",
@@ -88,7 +107,7 @@ const inputStyle = {
   borderRadius: "8px",
   border: "1px solid #374151",
   background: "#1f2937",
-  color: "white", // ✅ FIXED TEXT VISIBILITY
+  color: "white",
   outline: "none",
 };
 
