@@ -9,22 +9,12 @@ export default function DashboardPage() {
     orders: "0",
   });
 
-  const loadData = () => {
+  useEffect(() => {
     const stored = localStorage.getItem("dashboardData");
+
     if (stored) {
       setData(JSON.parse(stored));
     }
-  };
-
-  useEffect(() => {
-    loadData();
-
-    // 🔥 this listens when page becomes active again
-    window.addEventListener("focus", loadData);
-
-    return () => {
-      window.removeEventListener("focus", loadData);
-    };
   }, []);
 
   return (
@@ -71,6 +61,5 @@ const styles: any = {
     borderRadius: "12px",
     minWidth: "200px",
     background: "linear-gradient(90deg, #6366f1, #8b5cf6)",
-    fontSize: "18px",
   },
 };

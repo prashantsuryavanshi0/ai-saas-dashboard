@@ -8,21 +8,19 @@ export default function AdminPage() {
   const [orders, setOrders] = useState("");
 
   const handleSave = () => {
-    const data = {
-      revenue,
-      users,
-      orders,
-    };
+    const data = { revenue, users, orders };
 
     localStorage.setItem("dashboardData", JSON.stringify(data));
 
-    alert("Data Saved Successfully ✅");
+    alert(
+      `Saved:\nRevenue: ${revenue}\nUsers: ${users}\nOrders: ${orders}`
+    );
   };
 
   return (
     <div style={styles.container}>
       <div style={styles.card}>
-        <h1 style={styles.title}>⚙️ Admin Panel</h1>
+        <h2>⚙️ Admin Panel</h2>
 
         <input
           placeholder="Revenue"
@@ -56,32 +54,25 @@ export default function AdminPage() {
 const styles: any = {
   container: {
     height: "100vh",
+    background: "#0f172a",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    background: "#0f172a",
   },
   card: {
-    background: "#111827",
+    background: "#1e293b",
     padding: "30px",
-    borderRadius: "16px",
-    width: "320px",
+    borderRadius: "12px",
     display: "flex",
     flexDirection: "column",
     gap: "15px",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
-  },
-  title: {
+    width: "300px",
     color: "white",
-    textAlign: "center",
   },
   input: {
-    padding: "12px",
+    padding: "10px",
     borderRadius: "8px",
-    border: "1px solid #ccc",
-    background: "#fff",
-    color: "#000", // FIXED typing visibility
-    outline: "none",
+    border: "none",
   },
   button: {
     padding: "12px",
@@ -89,7 +80,6 @@ const styles: any = {
     border: "none",
     background: "linear-gradient(90deg, #6366f1, #8b5cf6)",
     color: "white",
-    fontWeight: "bold",
     cursor: "pointer",
   },
 };
