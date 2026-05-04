@@ -1,52 +1,30 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
 
 export default function AdminPage() {
-  const searchParams = useSearchParams();
-  const role = searchParams.get("role");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const [revenue, setRevenue] = useState("");
   const [users, setUsers] = useState("");
   const [orders, setOrders] = useState("");
-  const [loading, setLoading] = useState(true);
 
-  // 🔒 Admin Protection
-  if (role !== "admin") {
-    return (
-      <div style={{ color: "white", padding: "40px" }}>
-        ❌ Access Denied (Admin only)
-      </div>
-    );
-  }
+  const [message, setMessage] = useState("");
 
-  // 📥 Fetch existing data (important for assignment)
+  // ✅ Check role from URL
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch("/api/dashboard");
-        const data = await res.json();
+    const params = new URLSearchParams(window.location.search);
+    const role = params.get("role");
 
-        setRevenue(data.revenue?.toString() || "");
-        setUsers(data.users?.toString() || "");
-        setOrders(data.orders?.toString() || "");
-      } catch (err) {
-        console.error("Error fetching:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    if (role === "admin") {
+      setIsAdmin(true);
+    }
   }, []);
 
-  // 💾 Save data
+  // ✅ Save data to API
   const handleSave = async () => {
     try {
-      await fetch("/api/admin", {
+      const res = await fetch("/api/dashboard", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -58,98 +36,99 @@ export default function AdminPage() {
         }),
       });
 
-      alert("Saved successfully 🚀");
-    } catch (err) {
-      console.error("Save error:", err);
+      const data = await res.json();
+
+      if (res.ok) {
+        setMessage("✅ Data saved successfully!");
+      } else {
+        setMessage("❌ Failed to save data");
+      }
+    } catch (error) {
+      setMessage("❌ Error occurred");
     }
   };
 
-  if (loading) {
+  // ❌ Not admin
+  if (!isAdmin) {
     return (
       <div style={{ color: "white", padding: "40px" }}>
-        Loading...
+        ❌ Access Denied (Admin only)
       </div>
     );
   }
 
+  // ✅ Admin Panel UI
   return (
     <div
       style={{
         minHeight: "100vh",
-        background: "linear-gradient(to right, #020617, #020617)",
+        background: "black",
         color: "white",
         padding: "40px",
       }}
     >
       <h1 style={{ fontSize: "28px", marginBottom: "20px" }}>
-        Admin Panel ⚙️
+        Admin Panel
       </h1>
 
-      {/* Revenue */}
       <input
+        type="number"
         placeholder="Revenue"
         value={revenue}
         onChange={(e) => setRevenue(e.target.value)}
         style={{
           display: "block",
-          marginBottom: "15px",
-          padding: "12px",
-          width: "300px",
-          borderRadius: "8px",
-          border: "1px solid #444",
-          background: "#1f2937",
-          color: "white",
+          marginBottom: "10px",
+          padding: "10px",
+          width: "250px",
         }}
       />
 
-      {/* Users */}
       <input
+        type="number"
         placeholder="Users"
         value={users}
         onChange={(e) => setUsers(e.target.value)}
         style={{
           display: "block",
-          marginBottom: "15px",
-          padding: "12px",
-          width: "300px",
-          borderRadius: "8px",
-          border: "1px solid #444",
-          background: "#1f2937",
-          color: "white",
+          marginBottom: "10px",
+          padding: "10px",
+          width: "250px",
         }}
       />
 
-      {/* Orders */}
       <input
+        type="number"
         placeholder="Orders"
         value={orders}
         onChange={(e) => setOrders(e.target.value)}
         style={{
           display: "block",
           marginBottom: "20px",
-          padding: "12px",
-          width: "300px",
-          borderRadius: "8px",
-          border: "1px solid #444",
-          background: "#1f2937",
-          color: "white",
+          padding: "10px",
+          width: "250px",
         }}
       />
 
-      {/* Save Button */}
       <button
         onClick={handleSave}
         style={{
-          padding: "12px 24px",
-          background: "linear-gradient(to right, #6366f1, #a855f7)",
-          color: "white",
+          padding: "10px 20px",
+          background: "purple",
           border: "none",
-          borderRadius: "8px",
+          color: "white",
           cursor: "pointer",
         }}
       >
         Save
       </button>
+
+      {message && (
+        <p style={{ marginTop: "15px" }}>
+          {message}
+        </p>
+      )}
     </div>
   );
 }
+       
