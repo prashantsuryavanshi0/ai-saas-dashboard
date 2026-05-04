@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 
 export default function DashboardPage() {
@@ -10,10 +9,14 @@ export default function DashboardPage() {
   });
 
   useEffect(() => {
-    const stored = localStorage.getItem("dashboardData");
+    const saved = JSON.parse(localStorage.getItem("dashboard") || "{}");
 
-    if (stored) {
-      setData(JSON.parse(stored));
+    if (saved) {
+      setData({
+        revenue: saved.revenue || "0",
+        users: saved.users || "0",
+        orders: saved.orders || "0",
+      });
     }
   }, []);
 
@@ -23,18 +26,18 @@ export default function DashboardPage() {
 
       <div style={styles.grid}>
         <div style={styles.card}>
-          <h3>Revenue</h3>
-          <p>₹{data.revenue}</p>
+          <p>Revenue</p>
+          <h2>₹{data.revenue}</h2>
         </div>
 
         <div style={styles.card}>
-          <h3>Users</h3>
-          <p>{data.users}</p>
+          <p>Users</p>
+          <h2>{data.users}</h2>
         </div>
 
         <div style={styles.card}>
-          <h3>Orders</h3>
-          <p>{data.orders}</p>
+          <p>Orders</p>
+          <h2>{data.orders}</h2>
         </div>
       </div>
     </div>
@@ -43,23 +46,23 @@ export default function DashboardPage() {
 
 const styles: any = {
   container: {
+    minHeight: "100vh",
+    background: "#020617",
+    color: "#fff",
     padding: "40px",
-    background: "#0f172a",
-    height: "100vh",
-    color: "white",
   },
   title: {
-    fontSize: "28px",
-    marginBottom: "20px",
+    fontSize: "32px",
+    marginBottom: "30px",
   },
   grid: {
     display: "flex",
     gap: "20px",
   },
   card: {
+    flex: 1,
     padding: "20px",
-    borderRadius: "12px",
-    minWidth: "200px",
-    background: "linear-gradient(90deg, #6366f1, #8b5cf6)",
+    borderRadius: "16px",
+    background: "linear-gradient(90deg, #3b82f6, #9333ea)",
   },
 };

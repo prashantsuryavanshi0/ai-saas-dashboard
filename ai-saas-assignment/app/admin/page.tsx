@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from "react";
 
 export default function AdminPage() {
@@ -7,11 +6,10 @@ export default function AdminPage() {
   const [users, setUsers] = useState("");
   const [orders, setOrders] = useState("");
 
-  // Load existing data (optional but good UX)
+  // Load saved data
   useEffect(() => {
-    const stored = localStorage.getItem("dashboardData");
-    if (stored) {
-      const data = JSON.parse(stored);
+    const data = JSON.parse(localStorage.getItem("dashboard") || "{}");
+    if (data) {
       setRevenue(data.revenue || "");
       setUsers(data.users || "");
       setOrders(data.orders || "");
@@ -25,18 +23,18 @@ export default function AdminPage() {
       orders,
     };
 
-    localStorage.setItem("dashboardData", JSON.stringify(data));
+    localStorage.setItem("dashboard", JSON.stringify(data));
 
-    alert("Saved successfully!");
-
-    // 🔥 IMPORTANT: redirect to dashboard
-    window.location.href = "/dashboard";
+    alert(`Saved:
+Revenue: ${revenue}
+Users: ${users}
+Orders: ${orders}`);
   };
 
   return (
     <div style={styles.container}>
       <div style={styles.card}>
-        <h2>⚙️ Admin Panel</h2>
+        <h2 style={{ color: "#fff" }}>⚙️ Admin Panel</h2>
 
         <input
           type="number"
@@ -72,7 +70,7 @@ export default function AdminPage() {
 
 const styles: any = {
   container: {
-    height: "100vh",
+    minHeight: "100vh",
     background: "#0f172a",
     display: "flex",
     justifyContent: "center",
@@ -81,25 +79,27 @@ const styles: any = {
   card: {
     background: "#1e293b",
     padding: "30px",
-    borderRadius: "12px",
+    borderRadius: "16px",
+    width: "300px",
     display: "flex",
     flexDirection: "column",
     gap: "15px",
-    width: "300px",
-    color: "white",
   },
   input: {
-    padding: "10px",
-    borderRadius: "8px",
+    padding: "12px",
+    borderRadius: "10px",
     border: "none",
     outline: "none",
+    background: "#e5e7eb",
+    color: "#000", // 🔥 FIXED
+    fontSize: "16px",
   },
   button: {
     padding: "12px",
-    borderRadius: "8px",
+    borderRadius: "10px",
     border: "none",
-    background: "linear-gradient(90deg, #6366f1, #8b5cf6)",
-    color: "white",
+    background: "linear-gradient(90deg, #6366f1, #9333ea)",
+    color: "#fff",
     cursor: "pointer",
   },
 };
