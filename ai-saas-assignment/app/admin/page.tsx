@@ -1,6 +1,6 @@
-export const dynamic = "force-dynamic";
-
 "use client";
+
+export const dynamic = "force-dynamic";
 
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
@@ -13,7 +13,7 @@ export default function AdminPage() {
   const [users, setUsers] = useState("");
   const [orders, setOrders] = useState("");
 
-  // ✅ Load existing data (optional)
+  // Load saved data
   useEffect(() => {
     const saved = localStorage.getItem("dashboardData");
     if (saved) {
@@ -24,7 +24,7 @@ export default function AdminPage() {
     }
   }, []);
 
-  // 🔐 Admin Protection
+  // Admin check
   if (role !== "admin") {
     return (
       <div style={{ color: "white", padding: "40px" }}>
@@ -33,7 +33,7 @@ export default function AdminPage() {
     );
   }
 
-  // 💾 Save Data
+  // Save data
   const handleSave = () => {
     localStorage.setItem(
       "dashboardData",
@@ -43,7 +43,6 @@ export default function AdminPage() {
         orders,
       })
     );
-
     alert("✅ Data Saved!");
   };
 
@@ -99,7 +98,7 @@ export default function AdminPage() {
   );
 }
 
-// 🎨 Styles
+// styles
 const inputStyle = {
   width: "100%",
   padding: "10px",
