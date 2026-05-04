@@ -8,9 +8,17 @@ export default function AdminPage() {
   const [orders, setOrders] = useState("");
 
   const handleSave = () => {
-    const data = { revenue, users, orders };
+    const data = {
+      revenue,
+      users,
+      orders,
+    };
 
+    // Save to localStorage
     localStorage.setItem("dashboardData", JSON.stringify(data));
+
+    // 🔥 Trigger update event
+    window.dispatchEvent(new Event("storage"));
 
     alert(
       `Saved:\nRevenue: ${revenue}\nUsers: ${users}\nOrders: ${orders}`
@@ -20,9 +28,10 @@ export default function AdminPage() {
   return (
     <div style={styles.container}>
       <div style={styles.card}>
-        <h2>⚙️ Admin Panel</h2>
+        <h2 style={styles.title}>⚙️ Admin Panel</h2>
 
         <input
+          type="number"
           placeholder="Revenue"
           value={revenue}
           onChange={(e) => setRevenue(e.target.value)}
@@ -30,6 +39,7 @@ export default function AdminPage() {
         />
 
         <input
+          type="number"
           placeholder="Users"
           value={users}
           onChange={(e) => setUsers(e.target.value)}
@@ -37,6 +47,7 @@ export default function AdminPage() {
         />
 
         <input
+          type="number"
           placeholder="Orders"
           value={orders}
           onChange={(e) => setOrders(e.target.value)}
@@ -68,11 +79,17 @@ const styles: any = {
     gap: "15px",
     width: "300px",
     color: "white",
+    boxShadow: "0 0 20px rgba(0,0,0,0.3)",
+  },
+  title: {
+    textAlign: "center",
   },
   input: {
-    padding: "10px",
+    padding: "12px",
     borderRadius: "8px",
     border: "none",
+    outline: "none",
+    fontSize: "14px",
   },
   button: {
     padding: "12px",
@@ -81,5 +98,6 @@ const styles: any = {
     background: "linear-gradient(90deg, #6366f1, #8b5cf6)",
     color: "white",
     cursor: "pointer",
+    fontWeight: "bold",
   },
 };
