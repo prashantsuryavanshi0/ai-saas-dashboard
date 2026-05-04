@@ -1,55 +1,64 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 export default function AdminPage() {
-  const [isAdmin, setIsAdmin] = useState(false);
+  const searchParams = useSearchParams();
+  const role = searchParams.get("role");
 
   const [revenue, setRevenue] = useState("");
   const [users, setUsers] = useState("");
   const [orders, setOrders] = useState("");
 
-  // ✅ VERY IMPORTANT: run only on browser
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const role = params.get("role");
-
-      if (role === "admin") {
-        setIsAdmin(true);
-      }
-    }
-  }, []);
-
-  // ❌ Block access
-  if (!isAdmin) {
-    return <div style={{ color: "white", padding: 40 }}>❌ Access Denied</div>;
+  // 🔐 Admin Protection
+  if (role !== "admin") {
+    return (
+      <div style={{ color: "white", padding: "40px" }}>
+        ❌ Access Denied (Admin only)
+      </div>
+    );
   }
 
-  // ✅ Admin UI
+  const handleSave = () => {
+    localStorage.setItem(
+      "dashboardData",
+      JSON.stringify({
+        revenue,
+        users,
+        orders,
+      })
+    );
+
+    alert("✅ Data Saved!");
+  };
+
   return (
-    <div style={{ padding: 40, color: "white", background: "black", minHeight: "100vh" }}>
+    <div style={{ padding: "40px", color: "white" }}>
       <h1>Admin Panel</h1>
 
       <input
         placeholder="Revenue"
         value={revenue}
         onChange={(e) => setRevenue(e.target.value)}
-      /><br /><br />
+      />
+      <br /><br />
 
       <input
         placeholder="Users"
         value={users}
         onChange={(e) => setUsers(e.target.value)}
-      /><br /><br />
+      />
+      <br /><br />
 
       <input
         placeholder="Orders"
         value={orders}
         onChange={(e) => setOrders(e.target.value)}
-      /><br /><br />
+      />
+      <br /><br />
 
-      <button>Save</button>
+      <button onClick={handleSave}>Save</button>
     </div>
   );
 }
