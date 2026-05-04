@@ -8,10 +8,15 @@ export default function AdminPage() {
   const [orders, setOrders] = useState("");
 
   const handleSave = () => {
-    alert(`Saved:
-Revenue: ${revenue}
-Users: ${users}
-Orders: ${orders}`);
+    const data = {
+      revenue,
+      users,
+      orders,
+    };
+
+    localStorage.setItem("dashboardData", JSON.stringify(data));
+
+    alert("Data Saved Successfully ✅");
   };
 
   return (
@@ -20,7 +25,6 @@ Orders: ${orders}`);
         <h1 style={styles.title}>⚙️ Admin Panel</h1>
 
         <input
-          type="text"
           placeholder="Revenue"
           value={revenue}
           onChange={(e) => setRevenue(e.target.value)}
@@ -28,7 +32,6 @@ Orders: ${orders}`);
         />
 
         <input
-          type="text"
           placeholder="Users"
           value={users}
           onChange={(e) => setUsers(e.target.value)}
@@ -36,7 +39,6 @@ Orders: ${orders}`);
         />
 
         <input
-          type="text"
           placeholder="Orders"
           value={orders}
           onChange={(e) => setOrders(e.target.value)}
@@ -72,16 +74,14 @@ const styles: any = {
   title: {
     color: "white",
     textAlign: "center",
-    marginBottom: "10px",
   },
   input: {
     padding: "12px",
     borderRadius: "8px",
     border: "1px solid #ccc",
-    background: "#ffffff",
-    color: "#000000", // ✅ FIXED (visible typing)
+    background: "#fff",
+    color: "#000", // FIXED typing visibility
     outline: "none",
-    fontSize: "14px",
   },
   button: {
     padding: "12px",

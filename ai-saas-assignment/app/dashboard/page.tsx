@@ -1,32 +1,66 @@
 "use client";
 
-import useDashboard from "@/hooks/useDashboard";
+import { useEffect, useState } from "react";
 
 export default function DashboardPage() {
-  const { data } = useDashboard();
+  const [data, setData] = useState({
+    revenue: "0",
+    users: "0",
+    orders: "0",
+  });
 
-  if (!data) return <p>Loading...</p>;
+  useEffect(() => {
+    const stored = localStorage.getItem("dashboardData");
+
+    if (stored) {
+      setData(JSON.parse(stored));
+    }
+  }, []);
 
   return (
-    <div className="min-h-screen bg-black text-white p-10">
-      <h1 className="text-3xl mb-6">AI SaaS Dashboard 🚀</h1>
+    <div style={styles.container}>
+      <h1 style={styles.title}>AI SaaS Dashboard 🚀</h1>
 
-      <div className="flex gap-6">
-        {data.widgets.map((widget: any, i: number) => (
-          <div
-            key={i}
-            className="p-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl w-64"
-          >
-            <p>{widget.label}</p>
+      <div style={styles.grid}>
+        <div style={styles.card}>
+          <h3>Revenue</h3>
+          <p>₹{data.revenue}</p>
+        </div>
 
-            <h2 className="text-2xl">
-              {widget.key === "revenue" && `₹${data.revenue}`}
-              {widget.key === "users" && data.users}
-              {widget.key === "orders" && data.orders}
-            </h2>
-          </div>
-        ))}
+        <div style={styles.card}>
+          <h3>Users</h3>
+          <p>{data.users}</p>
+        </div>
+
+        <div style={styles.card}>
+          <h3>Orders</h3>
+          <p>{data.orders}</p>
+        </div>
       </div>
     </div>
   );
 }
+
+const styles: any = {
+  container: {
+    padding: "40px",
+    background: "#0f172a",
+    height: "100vh",
+    color: "white",
+  },
+  title: {
+    fontSize: "28px",
+    marginBottom: "20px",
+  },
+  grid: {
+    display: "flex",
+    gap: "20px",
+  },
+  card: {
+    padding: "20px",
+    borderRadius: "12px",
+    minWidth: "200px",
+    background: "linear-gradient(90deg, #6366f1, #8b5cf6)",
+    fontSize: "18px",
+  },
+};
