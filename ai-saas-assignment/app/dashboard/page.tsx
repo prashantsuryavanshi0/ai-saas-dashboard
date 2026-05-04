@@ -9,24 +9,12 @@ export default function DashboardPage() {
     orders: "0",
   });
 
-  // 🔥 LOAD DATA
-  const loadData = () => {
+  useEffect(() => {
     const stored = localStorage.getItem("dashboardData");
+
     if (stored) {
       setData(JSON.parse(stored));
     }
-  };
-
-  useEffect(() => {
-    // First load
-    loadData();
-
-    // 🔥 Listen for changes (REAL FIX)
-    window.addEventListener("storage", loadData);
-
-    return () => {
-      window.removeEventListener("storage", loadData);
-    };
   }, []);
 
   return (

@@ -1,11 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function AdminPage() {
   const [revenue, setRevenue] = useState("");
   const [users, setUsers] = useState("");
   const [orders, setOrders] = useState("");
+
+  // Load existing data (optional but good UX)
+  useEffect(() => {
+    const stored = localStorage.getItem("dashboardData");
+    if (stored) {
+      const data = JSON.parse(stored);
+      setRevenue(data.revenue || "");
+      setUsers(data.users || "");
+      setOrders(data.orders || "");
+    }
+  }, []);
 
   const handleSave = () => {
     const data = {
@@ -14,21 +25,18 @@ export default function AdminPage() {
       orders,
     };
 
-    // Save to localStorage
     localStorage.setItem("dashboardData", JSON.stringify(data));
 
-    // 🔥 Trigger update event
-    window.dispatchEvent(new Event("storage"));
+    alert("Saved successfully!");
 
-    alert(
-      `Saved:\nRevenue: ${revenue}\nUsers: ${users}\nOrders: ${orders}`
-    );
+    // 🔥 IMPORTANT: redirect to dashboard
+    window.location.href = "/dashboard";
   };
 
   return (
     <div style={styles.container}>
       <div style={styles.card}>
-        <h2 style={styles.title}>⚙️ Admin Panel</h2>
+        <h2>⚙️ Admin Panel</h2>
 
         <input
           type="number"
@@ -79,17 +87,12 @@ const styles: any = {
     gap: "15px",
     width: "300px",
     color: "white",
-    boxShadow: "0 0 20px rgba(0,0,0,0.3)",
-  },
-  title: {
-    textAlign: "center",
   },
   input: {
-    padding: "12px",
+    padding: "10px",
     borderRadius: "8px",
     border: "none",
     outline: "none",
-    fontSize: "14px",
   },
   button: {
     padding: "12px",
@@ -98,6 +101,5 @@ const styles: any = {
     background: "linear-gradient(90deg, #6366f1, #8b5cf6)",
     color: "white",
     cursor: "pointer",
-    fontWeight: "bold",
   },
 };
