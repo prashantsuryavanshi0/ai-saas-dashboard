@@ -1,119 +1,99 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function AdminPage() {
-  const [mounted, setMounted] = useState(false);
-
   const [revenue, setRevenue] = useState("");
   const [users, setUsers] = useState("");
   const [orders, setOrders] = useState("");
 
-  useEffect(() => {
-    setMounted(true);
-
-    const data = localStorage.getItem("dashboardData");
-    if (data) {
-      const parsed = JSON.parse(data);
-      setRevenue(parsed.revenue || "");
-      setUsers(parsed.users || "");
-      setOrders(parsed.orders || "");
-    }
-  }, []);
-
-  if (!mounted) return null;
-
-  const isAdmin =
-    typeof window !== "undefined" &&
-    window.location.search.includes("role=admin");
-
-  if (!isAdmin) {
-    return (
-      <div style={{ color: "white", padding: "20px" }}>
-        ❌ Access Denied
-      </div>
-    );
-  }
-
   const handleSave = () => {
-    localStorage.setItem(
-      "dashboardData",
-      JSON.stringify({ revenue, users, orders })
-    );
-    alert("Saved Successfully ✅");
+    alert("Saved successfully 🚀");
+    console.log({ revenue, users, orders });
   };
 
   return (
     <div
       style={{
-        minHeight: "100vh",
-        background: "#020617",
-        color: "white",
+        height: "100vh",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        background: "#020617",
       }}
     >
       <div
         style={{
           background: "#0f172a",
           padding: "30px",
-          borderRadius: "10px",
+          borderRadius: "12px",
           width: "320px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "15px",
+          boxShadow: "0 0 20px rgba(0,0,0,0.5)",
         }}
       >
-        <h1 style={{ marginBottom: "20px" }}>Admin Panel ⚙️</h1>
+        <h1 style={{ color: "white", textAlign: "center" }}>
+          ⚙️ Admin Panel
+        </h1>
 
         <input
           type="text"
+          placeholder="Revenue"
           value={revenue}
           onChange={(e) => setRevenue(e.target.value)}
-          placeholder="Revenue"
-          style={inputStyle}
+          style={{
+            padding: "10px",
+            borderRadius: "6px",
+            border: "none",
+            outline: "none",
+            fontSize: "14px",
+          }}
         />
 
         <input
           type="text"
+          placeholder="Users"
           value={users}
           onChange={(e) => setUsers(e.target.value)}
-          placeholder="Users"
-          style={inputStyle}
+          style={{
+            padding: "10px",
+            borderRadius: "6px",
+            border: "none",
+            outline: "none",
+            fontSize: "14px",
+          }}
         />
 
         <input
           type="text"
+          placeholder="Orders"
           value={orders}
           onChange={(e) => setOrders(e.target.value)}
-          placeholder="Orders"
-          style={inputStyle}
+          style={{
+            padding: "10px",
+            borderRadius: "6px",
+            border: "none",
+            outline: "none",
+            fontSize: "14px",
+          }}
         />
 
-        <button onClick={handleSave} style={btnStyle}>
+        <button
+          onClick={handleSave}
+          style={{
+            padding: "10px",
+            background: "#6366f1",
+            color: "white",
+            border: "none",
+            borderRadius: "6px",
+            cursor: "pointer",
+          }}
+        >
           Save
         </button>
       </div>
     </div>
   );
 }
-
-const inputStyle = {
-  width: "100%",
-  padding: "10px",
-  marginBottom: "15px",
-  borderRadius: "6px",
-  border: "none",
-  outline: "none",
-  color: "black",
-};
-
-const btnStyle = {
-  width: "100%",
-  padding: "10px",
-  background: "#3b82f6",
-  border: "none",
-  borderRadius: "6px",
-  color: "white",
-  cursor: "pointer",
-};
