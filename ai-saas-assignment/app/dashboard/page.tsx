@@ -9,12 +9,22 @@ export default function DashboardPage() {
     orders: "0",
   });
 
-  useEffect(() => {
+  const loadData = () => {
     const stored = localStorage.getItem("dashboardData");
-
     if (stored) {
       setData(JSON.parse(stored));
     }
+  };
+
+  useEffect(() => {
+    loadData();
+
+    // 🔥 this listens when page becomes active again
+    window.addEventListener("focus", loadData);
+
+    return () => {
+      window.removeEventListener("focus", loadData);
+    };
   }, []);
 
   return (
